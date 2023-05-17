@@ -1,0 +1,76 @@
+<div class="notebook">
+
+<div class="nb-cell markdown" name="md1">
+Autômato Finito
+
+AF(Q, A, p, q0, F), onde:
+
+Q = conjunto finito de estados
+
+A = conjunto finito chamado de alfabeto
+
+p = função de transição na forma p = Q * A -&gt; Q.
+
+q0 = estado inicial
+
+F = conjunto de estados finais
+
+um automato finito recebe como entrada uma fita contendo símbolos do alfabeto e, a partir do estado inicial, vai percorrendo as funções de transição. Se ao final da fita o AF parar em um estado que pertence ao conjunto F, então, diz-se que a palavra da fita é reconhecida pelo autômato.
+</div>
+
+<div class="nb-cell program" name="p1">
+%1. Autômato finito - lista de entrada
+
+inicio(q1). %declara os vertices de inicio
+
+final(q2). %declara os vértices finais
+
+p(q1,0,q1). 
+p(q1,1,q2). %declara a ligação do automato, q1 vai para q2, lendo 0
+p(q2,0,q3).
+p(q2,1,q2).
+p(q3,0,q2).
+p(q3,1,q2).
+
+%fita é passada em reconhecedor em forma de lista
+teste(Fita) :-inicio(No),%retorna o No = q1
+	reconhecedor(No, Fita).%q1 é passado em reconhecedor como No
+
+%se a lista for vazia, verifica se existe um final igual a No.
+reconhecedor(No,[]) :- final(No).
+%De = No
+%se a fita não for vazia.
+reconhecedor(De,Fita) :- p(De, X, Para),%verifica ligações de De, todos os x e todos os Para
+	caminha(X, Fita, Nova_Fita),%chama caminha com s de p, fita, e passa uma Nova_Fita vazia.
+	reconhecedor(Para, Nova_Fita).%chama reconhecedor com Para e Nova_Fita
+
+caminha(H,[H | T],T).%adiciona H na pilha, o resto da pilha é retornado como T = Nova_Fita
+</div>
+
+<div class="nb-cell program" name="p2">
+
+inicio(q1).
+
+final(q2).
+
+p(q1,0,q1).
+p(q1,1,q2).
+p(q2,0,q3).
+p(q2,1,q2).
+p(q3,0,q2).
+p(q3,1,q2).
+
+teste(X) :- string_chars(X, Fita),
+	inicio(No),
+	reconhecedor(No, Fita).
+
+reconhecedor(No,[]) :- final(No).
+
+reconhecedor(De,Fita) :- p(De, X, Para),
+	caminha(X, Fita, Nova_Fita),
+	reconhecedor(Para, Nova_Fita).
+
+caminha(H,[H | T],T).
+</div>
+
+</div>
